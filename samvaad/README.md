@@ -92,7 +92,7 @@ Naming tips:
 
 ## 🏗️ Project Structure
 ```
-samvaad-DONE-Copy/
+samvaad/
 ├── cert/                 # SSL certificates
 ├── public/               # Frontend assets
 │   ├── index.html
