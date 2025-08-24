@@ -669,7 +669,7 @@ function openLocalStickersModal() {
                     img.onerror = function () {
                         console.error('Error loading image:', img.src);
                     };
-                    img.src = 'stick/stick/' + gifSrc;
+                    img.src = 'stick/sticker/' + gifSrc;
                     img.addEventListener('click', function() {
                         sendFileUpload(img.src);
                         closeModal();
