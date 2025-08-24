@@ -33,6 +33,7 @@
 ```bash
 git clone https://github.com/chaubeysatyam/Samvaad.git
 cd samvaad
+cd samvaad
 ```
 
 ### Step 2: Install Dependencies
