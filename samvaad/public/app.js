@@ -703,7 +703,7 @@ async function loadTrendingGifs() {
     showTenorLoading();
     
     try {
-        const response = await fetch(`https://g.tenor.com/v1/trending?key=LIVDSRZULELA&limit=50`);
+        const response = await fetch(`https://g.tenor.com/v1/trending?key=___YOUT_API_KEY___&limit=50`);
         const data = await response.json();
         
         if (data.results) {
@@ -730,7 +730,7 @@ async function searchTenorGifs(searchTerm) {
     showTenorLoading();
     
     try {
-        const response = await fetch(`https://g.tenor.com/v1/search?q=${encodeURIComponent(searchTerm)}&key=LIVDSRZULELA&limit=50`);
+        const response = await fetch(`https://g.tenor.com/v1/search?q=${encodeURIComponent(searchTerm)}&key=___YOUR__API__KEY___&limit=50`);
         const data = await response.json();
         
         if (data.results) {
