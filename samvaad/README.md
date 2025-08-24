@@ -99,7 +99,7 @@ samvaad-DONE-Copy/
 │   ├── styles.css
 │   ├── app.js
 │   ├── bod/              # Drawing canvas popup
-│   ├── stick/            # Sticker collection (names.py, images.json, stick/)
+│   ├── stick/            # Sticker collection (names.py, images.json, sticker/)
 │   └── videos/           # Video assets
 ├── uploads/              # File upload directory
 ├── server.js             # Node.js server
