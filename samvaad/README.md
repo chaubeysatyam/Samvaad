@@ -1,7 +1,20 @@
 # 🌟 samvaad - Real-Time Video Chat Application
 
 **samvaad** (meaning "Conversation" in Sanskrit) is a modern, feature-rich real-time video chat application built with Node.js, Socket.IO, and WebRTC. It provides a seamless communication experience with video calls, instant messaging, emoji support, sticker sharing, collaborative drawing, and interactive effects.
-![Setup Illustration](https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/chat%2Bvideo.png)
+
+
+<p>
+  <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/chat%2Bvideo.png" alt="Image 1" width="150" style="margin: 5px;"/>
+  <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/custom.png" alt="Image 2" width="150" style="margin: 5px;"/>
+  <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/gif.png" alt="Image 3" width="150" style="margin: 5px;"/>
+ <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/animation.png" alt="Image 3" width="150" style="margin: 5px;"/>
+ <img src=https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/dot.png" alt="Image 3" width="150" style="margin: 5px;"/>
+ <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/fileshare.png" alt="Image 3" width="150" style="margin: 5px;"/>
+  <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/tictactoe.png" alt="Image 3" width="150" style="margin: 5px;"/>
+   <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/whiteboard.png" alt="Image 3" width="150" style="margin: 5px;"/>
+    <img src="https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/youtube.png" alt="Image 3" width="150" style="margin: 5px;"/>
+ 
+</p>
 
 
 
