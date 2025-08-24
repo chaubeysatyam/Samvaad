@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-auto-rows: minmax(200px, auto);
+            grid-gap: 20px;
+            max-width: 1000px;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery img:hover {
+            transform: translateY(-5px) rotateY(5deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+    </style>
+</head>
+<body>
+    <input type="text" class="search-bar" placeholder="Search images...">
+    <div class="gallery" id="imageGallery"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const gallery = document.getElementById('imageGallery');
+            const searchBar = document.querySelector('.search-bar');
+
+            searchBar.addEventListener('input', function() {
+                const searchTerm = searchBar.value.toLowerCase();
+                const images = gallery.querySelectorAll('img');
+
+                images.forEach(img => {
+                    const alt = img.alt.toLowerCase();
+                    if (alt.includes(searchTerm)) {
+                        img.style.display = 'block';
+                    } else {
+                        img.style.display = 'none';
+                    }
+                });
+            });
+
+            fetch('images.json')
+                .then(response => response.json())
+                .then(data => {
+                    shuffleArray(data); // Shuffle the array
+                    data.forEach(filename => {
+                        const img = document.createElement('img');
+                        img.src = `stick/${filename}`;
+                        img.alt = filename;
+                        gallery.appendChild(img);
+                    });
+                })
+                .catch(error => console.error('Error loading images:', error));
+        });
+
+        // Function to shuffle an array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+    </script>
+    
+</body>
+</html>

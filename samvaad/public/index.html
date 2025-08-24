@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>samvaad</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div id="container">
+    <div id="videoContainer">
+        <div id="videoControls">
+            <button id="startCallButton">&#x1F4F2;</button>
+            <button id="muteButton">&#x1F3A4;</button>
+            <button id="toggleCameraButton">&#x1F4F7;</button>
+        </div>
+        <video id="remoteVideo" autoplay></video>
+        <div id="localVideoContainer">
+            <video id="localVideo" autoplay muted></video>
+        </div>
+    </div>
+    <div id="chatContainer">
+        <div id="chatMessages"></div>
+        <div id="messageInputContainer">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <input type="file" id="fileInput" style="display: none;">
+            <button id="fileButton" title="Attach File">📁</button>
+            <button id="sendButton" title="Send Message">➤</button>
+            <button id="emojiButton" title="Emoji">😊</button>
+            <button id="gifButton" title="Tenor GIFs"><i class="fas fa-film"></i></button>
+            <button id="stickerButton" title="My Stickers"><i class="fas fa-images"></i></button>
+            <button id="colorButton" title="Color">🎨</button>
+            <button id="waterButton" title="Water Effect" onclick="startAnimation()">💧</button>
+            <div id="fallingImage"></div>
+            <button id="penButton" title="Draw" onclick="openPopup()">✏️</button>
+        </div>
+    </div>
+</div>
+<div id="emojiPopup">
+    <div id="emojiContainer"></div>
+</div>
+
+<div id="gifModal" class="modal">
+    <span class="close" id="modalCloseButton" onclick="closeModal()">&times;</span>
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search...">
+    <div class="modal-content" id="gifContent"></div>
+</div>
+
+<div id="tenorGifModal" class="modal">
+    <span class="close" id="tenorModalCloseButton" onclick="closeTenorModal()">&times;</span>
+    <div class="tenor-header">
+        <h3>🎬 GIF Search</h3>
+        <input type="text" id="tenorSearchInput" class="search-bar" placeholder="Search GIFs...">
+    </div>
+    <div class="modal-content" id="tenorGifContent"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+<script>
+   function openPopup() {
+        window.open("bod/index.html", "", "width=600, height=600");
+    }
+</script>
+
+</body>
+</html>

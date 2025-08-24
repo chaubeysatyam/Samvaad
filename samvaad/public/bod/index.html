@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whiteboard</title>
+    <style>
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+}
+
+:root {
+    --main-bg-color: #f0f0f0;
+    --board-bg-color: #ffffff;
+    --primary-color: #007bff;
+}
+
+#toolbar {
+    position: fixed;
+    bottom: 0;
+    height: 10px;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to bottom, #6f6f6f 0%, #a5ebff 100%);
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+#toolbar .tool {
+    font-size: 30px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+    color: black;
+    transition: color 0.3s ease;
+}
+
+#toolbar .tool:hover {
+    color: #004d99;
+}
+
+#toolbar .tool:not(:last-child) {
+    margin-right: 20px;
+}
+
+/* Animation for toolbar appearance */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+#toolbar {
+    animation: slideUp 1.2s ease;
+}
+
+canvas {
+    display: block;
+    margin: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: var(--board-bg-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+canvas:hover {
+    transform: translateY(-3px); /* Lift up slightly on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+
+/* Styling for the color indicator */
+.color-indicator {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 10px;
+    right: 2px;
+    z-index: 1001; /* Ensure it's above the toolbar */
+}
+
+
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div id="toolbar">
+        <input type="color" id="colorPicker">
+<input type="range" id="brushSize" min="1" max="50" value="2">
+<div class="color-indicator"></div> <!-- Red dot indicator -->
+<button class="tool" id="eraser" data-tool="eraser" title="Eraser">🖋️</button>
+<button class="tool" id="clear" data-tool="clear" title="Clear">&#x1F5D1;</button>
+<button class="tool" id="undo" data-tool="undo" title="Undo">#</button>
+<button class="tool" id="redo" data-tool="redo" title="Redo">:::</button>
+
+        
+        <button class="tool" id="save" data-tool="save" title="Save">&#x1F4BE;</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const toolbar = document.getElementById('toolbar');
+        const colorPicker = document.getElementById('colorPicker');
+        const brushSizeInput = document.getElementById('brushSize');
+        const eraserButton = document.getElementById('eraser');
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let penColor = '#000000';
+        let penSize = 5;
+        let isEraser = false;
+        let history = [];
+        let historyIndex = -1;
+        let isTextToolActive = false;
+
+        const socket = io();
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - toolbar.offsetHeight;
+            addEventListeners();
+            resetHistory();
+        }
+
+        function addEventListeners() {
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            canvas.addEventListener('click', handleCanvasClick);
+            toolbar.addEventListener('click', handleToolbarClick);
+            colorPicker.addEventListener('input', setPenColor);
+            brushSizeInput.addEventListener('input', setPenSize);
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = [e.clientX, e.clientY];
+            socket.emit('startDrawing', { x: lastX, y: lastY });
+        }
+
+        function draw(e) {
+    if (!isDrawing) return;
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.clientX, e.clientY);
+    ctx.strokeStyle = isEraser ? 'white' : penColor;
+    ctx.lineWidth = penSize;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    [lastX, lastY] = [e.clientX, e.clientY];
+    socket.emit('draw', { x: lastX, y: lastY, eraser: isEraser, color: penColor, size: penSize });
+}
+// Function to update the indicator color based on the current state
+const indicator = document.querySelector('.color-indicator');
+
+// Listen for 'updateIndicatorColor' event from the server
+socket.on('updateIndicatorColor', (color) => {
+  // Update the background color of the indicator based on the emitted color
+  indicator.style.backgroundColor = color;
+});
+
+// Add event listeners for mouse enter and mouse leave on the canvas
+canvas.addEventListener('mouseenter', () => {
+  // Emit 'canvasPointerEnter' event to the server when mouse enters the canvas
+  socket.emit('canvasPointerEnter');
+});
+
+canvas.addEventListener('mouseleave', () => {
+  // Emit 'canvasPointerLeave' event to the server when mouse leaves the canvas
+  socket.emit('canvasPointerLeave');
+});
+
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                if (!isTextToolActive) {
+                    saveToHistory();
+                }
+                socket.emit('stopDrawing');
+            }
+        }
+
+        function handleCanvasClick(e) {
+            if (isTextToolActive) {
+                const text = prompt('Enter text:');
+                if (text) {
+                    ctx.font = `${penSize * 2}px Arial`;
+                    ctx.fillStyle = isEraser ? 'white' : penColor;
+                    ctx.fillText(text, e.clientX, e.clientY);
+                    saveToHistory();
+                    socket.emit('addText', { x: e.clientX, y: e.clientY, text, color: penColor, size: penSize });
+                }
+            }
+        }
+
+        function handleToolbarClick(e) {
+            const tool = e.target.dataset.tool;
+            if (!tool) return;
+
+            switch (tool) {
+                case 'eraser':
+                    toggleEraser();
+                    socket.emit('toggleTool', isEraser);
+                    break;
+                case 'clear':
+                    clearCanvas();
+                    socket.emit('clearCanvas');
+                    break;
+                case 'undo':
+                    undo();
+                    socket.emit('undo');
+                    break;
+                case 'redo':
+                    redo();
+                    socket.emit('redo');
+                    break;
+                case 'save':
+                    saveCanvas();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function saveCanvas() {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = 'whiteboard.png';
+            link.click();
+        }
+
+        function setPenColor(e) {
+            penColor = e.target.value;
+        }
+
+        function setPenSize(e) {
+            penSize = e.target.value;
+        }
+
+        function toggleEraser() {
+            isEraser = !isEraser;
+            eraserButton.innerHTML = isEraser ? '🧽' : '🖋️';
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            resetHistory();
+        }
+
+        function undo() {
+    if (1==1) {
+        
+        drawTicTacToeGame();
+    } else {
+        drawTicTacToeGame();
+    }
+}
+
+function redo() {
+    if (1==1) {
+        
+        drawDotGrid();
+    } else {
+        drawDotGrid();
+    }
+}
+
+function drawTicTacToeGame() {
+    const gridSize = 3;
+    const cellSize = Math.min(canvas.width, canvas.height) / gridSize;
+
+    // Draw vertical lines
+    for (let i = 1; i < gridSize; i++) {
+        const x = i * cellSize;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+
+    // Draw horizontal lines
+    for (let i = 1; i < gridSize; i++) {
+        const y = i * cellSize;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
+}
+
+function drawDotGrid() {
+    const dotSize = 5;
+    const spacing = Math.min(canvas.width, canvas.height) / 6; // Adjust spacing for 5x5 grid
+    
+    for (let x = spacing; x < canvas.width; x += spacing) {
+        for (let y = spacing; y < canvas.height; y += spacing) {
+            ctx.beginPath();
+            ctx.arc(x, y, dotSize, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
+
+
+        function saveToHistory() {
+            history = history.slice(0, historyIndex + 1);
+            history.push(canvas.toDataURL());
+            historyIndex++;
+        }
+
+        function resetHistory() {
+            history = [];
+            historyIndex = -1;
+        }
+
+        function redrawFromHistory() {
+           pass;
+        }
+
+        function resizeCanvas() {
+            const oldWidth = canvas.width;
+            const oldHeight = canvas.height;
+            const oldImageData = ctx.getImageData(0, 0, oldWidth, oldHeight);
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - toolbar.offsetHeight;
+
+            ctx.putImageData(oldImageData, 0, 0);
+        }
+
+        socket.on('draw', data => {
+            const { x, y, eraser, color, size } = data;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = eraser ? 'white' : color;
+            ctx.lineWidth = size;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        });
+
+        socket.on('startDrawing', data => {
+            [lastX, lastY] = [data.x, data.y];
+            isDrawing = true;
+        });
+
+        socket.on('stopDrawing', () => {
+            isDrawing = false;
+        });
+
+       
+
+        socket.on('clearCanvas', () => {
+            clearCanvas();
+        });
+
+        socket.on('undo', () => {
+            undo();
+        });
+
+        socket.on('redo', () => {
+            redo();
+        });
+
+        init();
+    });
+    </script>
+</body>
+</html>
