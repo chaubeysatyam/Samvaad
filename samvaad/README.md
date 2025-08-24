@@ -60,7 +60,7 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -node
 cd public/stick
 python names.py
 ```
-This generates `images.json` listing available stickers from `public/stick/stick/`.
+This generates `images.json` listing available stickers from `public/stick/sticker/`.
 
 ### Step 5: Start the Server
 ```bash
