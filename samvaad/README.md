@@ -25,7 +25,7 @@
 
 ### Prerequisites
 - Node.js 
-- npm or yarn
+- npm 
 - Python 3.6+ (for the optional sticker management script)
 - SSL certificates for HTTPS (required for WebRTC in browsers)
 
@@ -42,28 +42,15 @@ npm init -y
 npm install express socket.io multer
 ```
 
-### Step 3: SSL Certificate Setup
-Create a `cert` folder in the root directory and add your SSL certificates:
-```
-cert/
-├── key.pem    # Private key
-└── cert.pem   # Certificate
-```
-For development/testing you can generate self-signed certificates:
-```bash
-mkdir cert
-cd cert
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
-```
 
-### Step 4: Setup Sticker Collection (Optional)
+### Step 3: Setup Sticker Collection (Optional)
 ```bash
 cd public/stick
 python names.py
 ```
 This generates `images.json` listing available stickers from `public/stick/sticker/`.
 
-### Step 5: Start the Server
+### Step 4: Start the Server
 ```bash
 npm start
 ```
@@ -94,7 +81,6 @@ Naming tips:
 ## 🏗️ Project Structure
 ```
 samvaad/
-├── cert/                 # SSL certificates
 ├── public/               # Frontend assets
 │   ├── index.html
 │   ├── styles.css
@@ -169,8 +155,7 @@ If you need HTTP for local testing, modify `server.js` as documented, but note m
 
 
 ## 🙏 Acknowledgments & Credits
- -Developed with the assistance of AI tools like ChatGPT, GitHub Copilot, and DeepSeek. Designed for seamless interaction and modern web experiences.
-
+-Developed with the assistance of AI tools like ChatGPT, GitHub Copilot, and DeepSeek. Built for seamless modern interaction and web-based teamwork.
 
 - WebRTC, Socket.IO, Node.js community  
 - Tools: Multer, FormData, Python for sticker indexing  
