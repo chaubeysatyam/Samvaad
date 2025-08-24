@@ -1,7 +1,7 @@
 # 🌟 samvaad - Real-Time Video Chat Application
 
 **samvaad** (meaning "Conversation" in Sanskrit) is a modern, feature-rich real-time video chat application built with Node.js, Socket.IO, and WebRTC. It provides a seamless communication experience with video calls, instant messaging, emoji support, sticker sharing, collaborative drawing, and interactive effects.
-
+![Setup Illustration](https://github.com/chaubeysatyam/Samvaad/blob/462f44789b449dd8d99964c9fecfd35210ccfe89/samvaad/images/chat%2Bvideo.png)
 
 
 
