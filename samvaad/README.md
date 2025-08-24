@@ -168,7 +168,8 @@ If you need HTTP for local testing, modify `server.js` as documented, but note m
 
 
 ## 🙏 Acknowledgments & Credits
-Built with help from open-source tools and AI coding assistants. Made with ❤️ for seamless communication.
+ -Developed with the assistance of AI tools like ChatGPT, GitHub Copilot, and DeepSeek. Designed for seamless interaction and modern web experiences.
+
 
 - WebRTC, Socket.IO, Node.js community  
 - Tools: Multer, FormData, Python for sticker indexing  
