@@ -1,19 +1,14 @@
+// server.js
+
 const express = require('express');
-const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const socketIO = require('socket.io');
 const multer = require('multer');
 const path = require('path');
 
 const app = express();
-
-// Load the SSL certificate and key
-const privateKey = fs.readFileSync(path.join(__dirname, 'cert', 'key.pem'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
-
-const server = https.createServer(credentials, app); // Use https.createServer
-
+const server = http.createServer(app); // Use HTTP instead of HTTPS
 const io = socketIO(server);
 
 // Set up multer for file uploads
