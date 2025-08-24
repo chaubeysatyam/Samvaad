@@ -42,15 +42,27 @@ npm init -y
 npm install express socket.io multer
 ```
 
+### Step 3: Configure Tenor GIF API Key
+To enable GIF search and trending GIFs, obtain a Tenor API key (get a key at the Tenor Developer Portal). Add your key to the frontend code and replace the placeholder URLs.
 
-### Step 3: Setup Sticker Collection (Optional)
+Replace any occurrences of:
+```javascript
+// Trending GIFs
+const response = await fetch(`https://g.tenor.com/v1/trending?key=___YOUR_API_KEY___&limit=50`);
+
+// Search GIFs
+const response = await fetch(`https://g.tenor.com/v1/search?q=${encodeURIComponent(searchTerm)}&key=___YOUR_API_KEY___&limit=50`);
+```
+with the examples above using TENOR_API_KEY.
+
+### Step 4: Setup Sticker Collection (Optional)
 ```bash
 cd public/stick
 python names.py
 ```
 This generates `images.json` listing available stickers from `public/stick/sticker/`.
 
-### Step 4: Start the Server
+### Step 5: Start the Server
 ```bash
 npm start
 ```
@@ -159,7 +171,7 @@ If you need HTTP for local testing, modify `server.js` as documented, but note m
 
 - WebRTC, Socket.IO, Node.js community  
 - Tools: Multer, FormData, Python for sticker indexing  
-- AI Assistance: ChatGPT (GPT), GitHub Copilot, DeepSeek  
+- AI Assistance: ChatGPT (GPT), GitHub Copilot, DeepSeek
 
 
 
