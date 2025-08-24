@@ -1,0 +1,1 @@
+"Files/images shared  will be stored here. If they are deleted from the chat, they will also be automatically removed from this location."
