@@ -78,7 +78,7 @@ The application will be available at `https://localhost:3000` (when using HTTPS)
 
 ## 🐍 Python Script for Sticker Management
 Purpose:
-- Scans `public/stick/stick/` for PNG and WebP files and generates `images.json`.
+- Scans `public/stick/sticker/` for PNG and WebP files and generates `images.json`.
 - Enables searchable stickers using descriptive filenames.
 
 Usage:
